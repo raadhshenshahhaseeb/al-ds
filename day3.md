@@ -57,3 +57,55 @@ Overall work is linear in the total number of nodes. Each step removes exactly o
 
 **For recursive:** `O(n+m) in worst case` because every time a function calls itself, it has to return after the inner call returns. 
 **For iterative:** `O(1)` because we only keep few pointers and this extra memory stays constant irrespective of the list size.
+
+## 912. Sort an Array
+```
+func sortArray(nums []int) []int {
+	if len(nums) == 0 {
+		return nums
+	}
+
+	buf := make([]int, len(nums))
+	mergeSort(nums, buf, 0, len(nums))
+	return nums
+}
+
+func mergeSort(a, buf []int, l, r int) {
+	if r-l <= 1 {
+		return
+	}
+	m := l + (r-l)/2
+	mergeSort(a, buf, l, m)
+	mergeSort(a, buf, m, r)
+	mergeRange(a, buf, l, m, r)
+}
+
+func mergeRange(a, buf []int, l, m, r int) {
+	i, j, k := l, m, l
+	for i < m && j < r {
+		if a[i] <= a[j] {
+			buf[k] = a[i]
+			i++
+		} else {
+			buf[k] = a[j]
+			j++
+		}
+		k++
+	}
+	for i < m {
+		buf[k] = a[i]
+		i++
+		k++
+	}
+	for j < r {
+		buf[k] = a[j]
+		j++
+		k++
+	}
+	for t := l; t < r; t++ {
+		a[t] = buf[t]
+	}
+}
+
+
+```
