@@ -109,3 +109,52 @@ func mergeRange(a, buf []int, l, m, r int) {
 
 
 ```
+
+## 148. Sort List - Merge Sort
+```
+func sortList(head *ListNode) *ListNode {
+    if head == nil || head.Next == nil{
+        return head
+    }
+
+    mid := split(head)
+    left := sortList(head)
+    right := sortList(mid)
+    return mergeLists(left,right)
+}
+
+func split(head *ListNode)*ListNode{
+    prev, slow, fast := (*ListNode)(nil), head, head
+
+    for fast!= nil && fast.Next != nil {
+        prev = slow
+        slow = slow.Next
+        fast = fast.Next.Next
+    }
+    if prev != nil {
+        prev.Next = nil
+    }
+
+    return slow
+}
+
+func mergeLists(left, right *ListNode)*ListNode{
+    temp := &ListNode{}
+    tail := temp
+
+    for left != nil && right != nil {
+        if left.Val <= right.Val {
+            tail.Next = left
+            left = left.Next
+        } else {
+            tail.Next = right
+            right = right.Next
+        }
+        tail = tail.Next
+    }
+
+    if left != nil { tail.Next = left} else {tail.Next = right}
+
+    return temp.Next
+}
+```
